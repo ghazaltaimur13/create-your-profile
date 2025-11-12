@@ -1,57 +1,67 @@
-# React + TypeScript + Vite
+# My Portfolio Builder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A minimal **React + TypeScript + Vite** app for building and previewing developer portfolios.
 
-Currently, two official plugins are available:
+## 🚀 Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. Install dependencies
 
-## React Compiler
+```bash
+npm install
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. Start the development server
 
-## Expanding the ESLint configuration
+```bash
+npm run dev
+```
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 3. Build for production
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    ## My Portfolio Builder
+```bash
+npm run build
+```
 
-    [![view on GitHub](https://img.shields.io/badge/github-repo-blue?logo=github)](https://github.com/ghazaltaimur13/create-your-profile)
-    [![vite](https://img.shields.io/badge/bundler-vite-brightgreen)](https://vitejs.dev/)
+### 4. Preview the production build
 
-    A small React + TypeScript + Vite application for building and previewing developer portfolios. Use it to create, save, and preview portfolio data with multiple templates.
+```bash
+npm run preview
+```
 
-    Quick start
+---
 
-    1. Install dependencies
+## 🧰 Tech Stack
 
-    ```bash
-    npm install
-    ```
+* **React 18 + TypeScript**
+* **Vite 5** (Bundler & Dev Server)
+* **ESLint + Prettier** for linting & formatting
 
-    2. Start the dev server
+---
 
-    ```bash
-    npm run dev
-    ```
+## 🛠 Plugins
 
-    3. Build for production
+* [`@vitejs/plugin-react`](https://github.com/vitejs/vite-plugin-react) (default)
+* [`@vitejs/plugin-react-swc`](https://github.com/vitejs/vite-plugin-react-swc) for faster builds
 
-    ```bash
-    npm run build
-    ```
+Use one plugin, not both.
 
-    4. Preview the production build locally
+---
 
-    ```bash
-    npm run preview
-    ```
+## 📦 Project Commands
 
-    License
+| Command           | Description                        |
+| ----------------- | ---------------------------------- |
+| `npm install`     | Install all dependencies           |
+| `npm run dev`     | Start dev server on localhost:5173 |
+| `npm run build`   | Create production build in `/dist` |
+| `npm run preview` | Preview the production build       |
 
-    This repository does not include a LICENSE file. If you want a permissive open-source license, add an `MIT` file at the project root. I can add it for you if you want.
+---
+
+## 📄 License
+
+This project currently does **not** include a license. To make it open-source, add an `MIT` license file in the project root.
+
+##    Developer / Owner
+Ghazal Ehsan
+ghazalehsan.com
