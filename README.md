@@ -63,5 +63,4 @@ Use one plugin, not both.
 This project currently does **not** include a license. To make it open-source, add an `MIT` license file in the project root.
 
 ##    Developer / Owner
-Ghazal Ehsan
-ghazalehsan.com
+Ghazal Ehsan (ghazalehsan.com)
