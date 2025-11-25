@@ -97,7 +97,7 @@ export const PreviewPage = () => {
           </Stack>
 
           <Box sx={{ position: 'relative' }}>
-            <PortfolioPreview ref={previewRef} data={data} template={template} />
+          <PortfolioPreview ref={previewRef} data={data} template={template} />
             {shouldShowWatermark(user) && (
               <Box
                 sx={{

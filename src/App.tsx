@@ -33,15 +33,15 @@ const AppLayout = () => {
               Portfolio Studio
             </Button>
             <Stack direction="row" spacing={1.5} alignItems="center">
-              <Button
-                component={Link}
-                to="/preview"
-                variant="contained"
-                startIcon={<PictureAsPdfRoundedIcon />}
-                sx={{ textTransform: 'none', borderRadius: '9999px' }}
-              >
-                Preview & PDF
-              </Button>
+            <Button
+              component={Link}
+              to="/preview"
+              variant="contained"
+              startIcon={<PictureAsPdfRoundedIcon />}
+              sx={{ textTransform: 'none', borderRadius: '9999px' }}
+            >
+              Preview & PDF
+            </Button>
               {isAuthenticated ? (
                 <>
                   <Chip

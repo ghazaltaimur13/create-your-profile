@@ -363,7 +363,7 @@ export const PortfolioBuilder = () => {
                 sx={{ alignSelf: 'flex-start', fontWeight: 600 }}
               />
               <div className="relative">
-                <PortfolioPreview ref={previewRef} data={snapshot} template={selectedTemplate} />
+              <PortfolioPreview ref={previewRef} data={snapshot} template={selectedTemplate} />
                 {shouldShow(user) && (
                   <div className="pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 rounded bg-white/70 px-2 py-1 text-[10px] font-medium text-slate-600 shadow">
                     Made with Portfolio Studio
