@@ -11,6 +11,8 @@ import { DEFAULT_TEMPLATE_ID } from '../constants/templates'
 import { defaultPortfolio } from '../data/defaultPortfolio'
 import type { PortfolioFormValues, PortfolioTemplateId } from '../types/portfolio'
 import { readStoredDraft } from '../utils/portfolioStorage'
+import { useUser } from '../hooks/useUser'
+import { shouldShowWatermark } from '../config/plans'
 
 type PreviewLocationState = {
   data?: PortfolioFormValues
@@ -18,6 +20,7 @@ type PreviewLocationState = {
 }
 
 export const PreviewPage = () => {
+  const { user } = useUser()
   const navigate = useNavigate()
   const { state } = useLocation()
   const previewRef = useRef<HTMLDivElement | null>(null)
@@ -52,6 +55,11 @@ export const PreviewPage = () => {
       const y = 10
 
       pdf.addImage(imgData, 'PNG', x, y, imgWidth, imgHeight)
+      if (shouldShowWatermark(user)) {
+        pdf.setFontSize(10)
+        pdf.setTextColor(150, 150, 150)
+        pdf.text('Made with Portfolio Studio', pageWidth / 2, pageHeight - 8, { align: 'center' })
+      }
       const fileName = data.personal.name ? data.personal.name.replace(/\s+/g, '-').toLowerCase() : 'portfolio'
       pdf.save(`${fileName}.pdf`)
     } catch (error) {
@@ -88,7 +96,29 @@ export const PreviewPage = () => {
             </Button>
           </Stack>
 
-          <PortfolioPreview ref={previewRef} data={data} template={template} />
+          <Box sx={{ position: 'relative' }}>
+            <PortfolioPreview ref={previewRef} data={data} template={template} />
+            {shouldShowWatermark(user) && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  bottom: 8,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  px: 1.5,
+                  py: 0.5,
+                  backgroundColor: 'rgba(255,255,255,0.75)',
+                  borderRadius: 1,
+                  fontSize: 10,
+                  color: '#475569',
+                  pointerEvents: 'none',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.08)',
+                }}
+              >
+                Made with Portfolio Studio
+              </Box>
+            )}
+          </Box>
         </Stack>
       </Container>
     </Box>

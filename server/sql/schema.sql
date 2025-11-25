@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  plan ENUM('free','pro') NOT NULL DEFAULT 'free',
+  plan_activated_at DATETIME NULL,
+  plan_type ENUM('lifetime','one_time') DEFAULT 'lifetime',
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
