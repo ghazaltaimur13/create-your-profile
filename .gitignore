@@ -28,5 +28,3 @@ server/.env
 *.njsproj
 *.sln
 *.sw?
-server/.env
-server/.env
