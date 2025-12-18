@@ -5,7 +5,7 @@ const {
   MYSQL_PORT = '3306',
   MYSQL_USER = 'portfolio_user',
   MYSQL_PASSWORD = 'AnotherStrongPass123!',
-  MYSQL_DATABASE = 'portfolio_app',
+  MYSQL_DATABASE = 'portfolio_db',
 } = process.env
 
 export const pool = mysql.createPool({
