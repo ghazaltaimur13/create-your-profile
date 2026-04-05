@@ -11,9 +11,9 @@ const {
 export const pool = mysql.createPool({
   host: MYSQL_HOST,
   port: Number(MYSQL_PORT),
-  user: MYSQL_USER ?? 'root',
-  password: MYSQL_PASSWORD ?? '',
-  database: MYSQL_DATABASE ?? 'portfolio_app',
+  user: MYSQL_USER ?? 'u630175796_nodeusr',
+  password: MYSQL_PASSWORD ?? 'Rk7!9pQ2#vT6xL4m',
+  database: MYSQL_DATABASE ?? 'u630175796_nodeappdb',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
