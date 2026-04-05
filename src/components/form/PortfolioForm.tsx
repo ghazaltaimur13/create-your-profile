@@ -60,10 +60,10 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
           </Typography>
           <Stack spacing={2}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField label="Full name" fullWidth {...register('personal.name', { required: true })} />
-              <TextField label="Headline / role" fullWidth {...register('personal.title')} />
+              <TextField variant="outlined" label="Full name" fullWidth {...register('personal.name', { required: true })} />
+              <TextField variant="outlined" label="Headline / role" fullWidth {...register('personal.title')} />
             </Stack>
-            <TextField label="Summary" multiline minRows={4} {...register('personal.summary')} />
+            <TextField variant="outlined" label="Summary" multiline minRows={4} {...register('personal.summary')} />
           </Stack>
 
           <Typography variant="subtitle1" fontWeight={600} color="text.secondary">
@@ -71,12 +71,12 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
           </Typography>
           <Stack spacing={2}>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField label="Email" fullWidth {...register('personal.email')} />
-              <TextField label="Phone" fullWidth {...register('personal.phone')} />
+              <TextField variant="outlined" label="Email" fullWidth {...register('personal.email')} />
+              <TextField variant="outlined" label="Phone" fullWidth {...register('personal.phone')} />
             </Stack>
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-              <TextField label="Location" fullWidth {...register('personal.location')} />
-              <TextField label="Website" fullWidth {...register('personal.website')} />
+              <TextField variant="outlined" label="Location" fullWidth {...register('personal.location')} />
+              <TextField variant="outlined" label="Website" fullWidth {...register('personal.website')} />
             </Stack>
           </Stack>
 
@@ -86,19 +86,17 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
             </Typography>
             <Stack spacing={2}>
               {socialsArray.fields.map((field, index) => (
-                <Stack key={field.id} direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="flex-start">
-                  <TextField
-                    label="Platform"
-                    fullWidth
-                    {...register(`socials.${index}.label` as const)}
-                  />
-                  <TextField
-                    label="URL"
-                    fullWidth
-                    {...register(`socials.${index}.url` as const)}
-                  />
+                <Stack
+                  key={field.id}
+                  direction={{ xs: 'column', sm: 'row' }}
+                  spacing={2}
+                  alignItems={{ xs: 'stretch', sm: 'flex-end' }}
+                >
+                  <TextField variant="outlined" label="Platform" fullWidth {...register(`socials.${index}.label` as const)} />
+                  <TextField variant="outlined" label="URL" fullWidth {...register(`socials.${index}.url` as const)} />
                   <Button
                     color="error"
+                    sx={{ flexShrink: 0, alignSelf: { xs: 'flex-start', sm: 'center' }, textTransform: 'none' }}
                     onClick={() => socialsArray.remove(index)}
                     startIcon={<DeleteRoundedIcon fontSize="small" />}
                   >
@@ -130,14 +128,16 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
                 spacing={2}
                 className="rounded-2xl border border-slate-100 bg-slate-50 p-4"
               >
-                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ md: 'center' }}>
+                <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems={{ xs: 'stretch', md: 'flex-end' }}>
                   <TextField
+                    variant="outlined"
                     label="Category"
                     fullWidth
                     {...register(`skills.${index}.category` as const)}
                   />
                   <Button
                     color="error"
+                    sx={{ flexShrink: 0, textTransform: 'none' }}
                     onClick={() => skillsArray.remove(index)}
                     startIcon={<DeleteRoundedIcon fontSize="small" />}
                   >
@@ -145,6 +145,7 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
                   </Button>
                 </Stack>
                 <TextField
+                  variant="outlined"
                   label="Skills"
                   placeholder="React, TypeScript, Accessibility, ..."
                   multiline
@@ -174,11 +175,13 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
               <Stack key={field.id} spacing={2} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                   <TextField
+                    variant="outlined"
                     label="Role"
                     fullWidth
                     {...register(`experience.${index}.role` as const)}
                   />
                   <TextField
+                    variant="outlined"
                     label="Company"
                     fullWidth
                     {...register(`experience.${index}.company` as const)}
@@ -186,17 +189,20 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
                 </Stack>
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                   <TextField
+                    variant="outlined"
                     label="Location"
                     fullWidth
                     {...register(`experience.${index}.location` as const)}
                   />
                   <TextField
+                    variant="outlined"
                     label="Start"
                     fullWidth
                     placeholder="2023"
                     {...register(`experience.${index}.startDate` as const)}
                   />
                   <TextField
+                    variant="outlined"
                     label="End"
                     fullWidth
                     placeholder="Present"
@@ -204,6 +210,7 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
                   />
                 </Stack>
                 <TextField
+                  variant="outlined"
                   label="Impact / responsibilities"
                   multiline
                   minRows={4}
@@ -249,23 +256,27 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
               <Stack key={field.id} spacing={2} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                   <TextField
+                    variant="outlined"
                     label="Project name"
                     fullWidth
                     {...register(`projects.${index}.name` as const)}
                   />
                   <TextField
+                    variant="outlined"
                     label="Project link"
                     fullWidth
                     {...register(`projects.${index}.link` as const)}
                   />
                 </Stack>
                 <TextField
+                  variant="outlined"
                   label="Summary"
                   multiline
                   minRows={4}
                   {...register(`projects.${index}.description` as const)}
                 />
                 <TextField
+                  variant="outlined"
                   label="Technologies"
                   placeholder="React, Tailwind, Node.js"
                   {...register(`projects.${index}.technologies` as const)}
@@ -308,11 +319,13 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
               <Stack key={field.id} spacing={2} className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                   <TextField
+                    variant="outlined"
                     label="Institution"
                     fullWidth
                     {...register(`education.${index}.institution` as const)}
                   />
                   <TextField
+                    variant="outlined"
                     label="Degree"
                     fullWidth
                     {...register(`education.${index}.degree` as const)}
@@ -320,12 +333,14 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
                 </Stack>
                 <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
                   <TextField
+                    variant="outlined"
                     label="Start"
                     fullWidth
                     placeholder="2016"
                     {...register(`education.${index}.startDate` as const)}
                   />
                   <TextField
+                    variant="outlined"
                     label="End"
                     fullWidth
                     placeholder="2020"
@@ -333,6 +348,7 @@ export const PortfolioForm = ({ activeTab, onTabChange }: PortfolioFormProps) =>
                   />
                 </Stack>
                 <TextField
+                  variant="outlined"
                   label="Highlights"
                   multiline
                   minRows={4}

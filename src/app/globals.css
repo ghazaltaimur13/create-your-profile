@@ -15,8 +15,33 @@ body {
   color: #0f172a;
 }
 
-/* Tailwind preflight sets border-width: 0 on all elements; MUI OutlinedInput uses a <fieldset> for the notch. */
-.MuiOutlinedInput-root fieldset.MuiOutlinedInput-notchedOutline,
-.MuiOutlinedInput-notchedOutline {
+/*
+  MUI + Tailwind preflight:
+  - `input, textarea { padding: 0 }` removes room for the floating label.
+  - `fieldset { padding: 0 }` breaks the notched outline (legend gap).
+  These rules are unlayered so they win over @layer base from Tailwind.
+*/
+.MuiOutlinedInput-root fieldset.MuiOutlinedInput-notchedOutline {
   border-width: 1px;
+  border-style: solid;
+  padding: 0 8px;
+  margin: 0;
+}
+
+.MuiOutlinedInput-root .MuiOutlinedInput-input {
+  padding: 16.5px 14px;
+  box-sizing: border-box;
+}
+
+.MuiOutlinedInput-root.MuiInputBase-multiline .MuiOutlinedInput-input {
+  padding: 16.5px 14px;
+  min-height: 1.5em;
+}
+
+.MuiOutlinedInput-root.MuiInputBase-sizeSmall .MuiOutlinedInput-input {
+  padding: 8.5px 14px;
+}
+
+.MuiOutlinedInput-root.MuiInputBase-sizeSmall.MuiInputBase-multiline .MuiOutlinedInput-input {
+  padding: 8.5px 14px;
 }
