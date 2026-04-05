@@ -70,8 +70,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {children}
       <Box component="footer" sx={{ py: 6 }}>
         <Container maxWidth="lg">
-          <Typography variant="body2" color="text.secondary" align="center">
+          <Typography variant="body2" color="text.secondary" align="center" component="div">
             Crafted with Next.js, Tailwind, and Material UI · {new Date().getFullYear()}
+            {process.env.NEXT_PUBLIC_APP_VERSION ? (
+              <Typography
+                component="span"
+                variant="caption"
+                display="block"
+                sx={{ mt: 0.75, color: 'text.disabled', fontFamily: 'ui-monospace, monospace' }}
+              >
+                v{process.env.NEXT_PUBLIC_APP_VERSION}
+              </Typography>
+            ) : null}
           </Typography>
         </Container>
       </Box>
