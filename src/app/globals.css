@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+/* If style edits seem ignored: hard-refresh (Cmd+Shift+R), restart `next dev`, or delete `.next` and rebuild. */
+
 :root {
   color-scheme: light;
   font-family: var(--font-inter), "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -16,32 +18,30 @@ body {
 }
 
 /*
-  MUI + Tailwind preflight:
-  - `input, textarea { padding: 0 }` removes room for the floating label.
-  - `fieldset { padding: 0 }` breaks the notched outline (legend gap).
-  These rules are unlayered so they win over @layer base from Tailwind.
+  MUI + Tailwind: Emotion often injects after this file, so plain rules can lose.
+  Theme overrides in theme.ts are primary; !important here wins over late-injected CSS.
 */
 .MuiOutlinedInput-root fieldset.MuiOutlinedInput-notchedOutline {
-  border-width: 1px;
-  border-style: solid;
-  padding: 0 8px;
-  margin: 0;
+  border-width: 1px !important;
+  border-style: solid !important;
+  padding: 0 8px !important;
+  margin: 0 !important;
 }
 
 .MuiOutlinedInput-root .MuiOutlinedInput-input {
-  padding: 16.5px 14px;
-  box-sizing: border-box;
+  padding: 16.5px 14px !important;
+  box-sizing: border-box !important;
 }
 
 .MuiOutlinedInput-root.MuiInputBase-multiline .MuiOutlinedInput-input {
-  padding: 16.5px 14px;
+  padding: 16.5px 14px !important;
   min-height: 1.5em;
 }
 
 .MuiOutlinedInput-root.MuiInputBase-sizeSmall .MuiOutlinedInput-input {
-  padding: 8.5px 14px;
+  padding: 8.5px 14px !important;
 }
 
 .MuiOutlinedInput-root.MuiInputBase-sizeSmall.MuiInputBase-multiline .MuiOutlinedInput-input {
-  padding: 8.5px 14px;
+  padding: 8.5px 14px !important;
 }

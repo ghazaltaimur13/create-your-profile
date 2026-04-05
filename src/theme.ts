@@ -43,6 +43,20 @@ const baseTheme = createTheme({
         },
       },
     },
+    /* Tailwind preflight + load order can zero out padding/borders; keep outlined fields usable. */
+    MuiOutlinedInput: {
+      styleOverrides: {
+        notchedOutline: {
+          borderWidth: 1,
+          borderStyle: 'solid',
+          padding: '0 8px',
+        },
+        input: ({ ownerState }) => ({
+          boxSizing: 'border-box',
+          padding: ownerState.size === 'small' ? '8.5px 14px' : '16.5px 14px',
+        }),
+      },
+    },
   },
 })
 
