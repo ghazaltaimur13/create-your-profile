@@ -1,15 +1,15 @@
+'use client'
+
 import MenuBookRoundedIcon from '@mui/icons-material/MenuBookRounded'
 import PictureAsPdfRoundedIcon from '@mui/icons-material/PictureAsPdfRounded'
 import { AppBar, Box, Button, Chip, Container, Stack, Toolbar, Typography } from '@mui/material'
-import { Link, Outlet, Route, Routes } from 'react-router-dom'
+import Link from 'next/link'
 import { useState } from 'react'
 
-import { BuilderPage } from './pages/BuilderPage'
-import { PreviewPage } from './pages/PreviewPage'
-import { useUser } from './hooks/useUser'
-import { LoginDialog } from './components/auth/LoginDialog'
+import { LoginDialog } from '@/components/auth/LoginDialog'
+import { useUser } from '@/hooks/useUser'
 
-const AppLayout = () => {
+export function AppShell({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, user, logout } = useUser()
   const [loginOpen, setLoginOpen] = useState(false)
 
@@ -25,7 +25,7 @@ const AppLayout = () => {
           <Container maxWidth="lg" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Button
               component={Link}
-              to="/"
+              href="/"
               color="inherit"
               startIcon={<MenuBookRoundedIcon />}
               sx={{ fontWeight: 700, textTransform: 'none', fontSize: '1.05rem' }}
@@ -33,15 +33,15 @@ const AppLayout = () => {
               Portfolio Studio
             </Button>
             <Stack direction="row" spacing={1.5} alignItems="center">
-            <Button
-              component={Link}
-              to="/preview"
-              variant="contained"
-              startIcon={<PictureAsPdfRoundedIcon />}
-              sx={{ textTransform: 'none', borderRadius: '9999px' }}
-            >
-              Preview & PDF
-            </Button>
+              <Button
+                component={Link}
+                href="/preview"
+                variant="contained"
+                startIcon={<PictureAsPdfRoundedIcon />}
+                sx={{ textTransform: 'none', borderRadius: '9999px' }}
+              >
+                Preview & PDF
+              </Button>
               {isAuthenticated ? (
                 <>
                   <Chip
@@ -67,27 +67,14 @@ const AppLayout = () => {
         </Toolbar>
       </AppBar>
       <LoginDialog open={loginOpen} onClose={() => setLoginOpen(false)} />
-      <Outlet />
+      {children}
       <Box component="footer" sx={{ py: 6 }}>
         <Container maxWidth="lg">
           <Typography variant="body2" color="text.secondary" align="center">
-            Crafted with React, Tailwind, and Material UI · {new Date().getFullYear()}
+            Crafted with Next.js, Tailwind, and Material UI · {new Date().getFullYear()}
           </Typography>
         </Container>
       </Box>
     </Box>
   )
 }
-
-export const App = () => {
-  return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route index element={<BuilderPage />} />
-        <Route path="preview" element={<PreviewPage />} />
-      </Route>
-    </Routes>
-  )
-}
-
-export default App

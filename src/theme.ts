@@ -14,7 +14,7 @@ const baseTheme = createTheme({
     },
   },
   typography: {
-    fontFamily: '"Inter", "Helvetica", "Arial", sans-serif',
+    fontFamily: 'var(--font-inter), "Inter", "Helvetica", "Arial", sans-serif',
     h4: {
       fontWeight: 700,
     },

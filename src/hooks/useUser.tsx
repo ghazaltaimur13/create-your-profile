@@ -1,4 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+'use client'
+
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import type { User } from '../types/user'
 import { createDefaultUser } from '../types/user'
 import { API_BASE_URL } from '../config/api'
@@ -30,7 +32,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const raw = window.localStorage.getItem('auth:user')
       if (raw) return JSON.parse(raw) as User
-    } catch {}
+    } catch {
+      // ignore invalid stored user
+    }
     return createDefaultUser()
   })
   const [token, setToken] = useState<string | null>(() => {
@@ -51,7 +55,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         window.localStorage.removeItem('auth:token')
       }
       window.localStorage.setItem('auth:isAuthenticated', isAuthenticated ? 'true' : 'false')
-    } catch {}
+    } catch {
+      // ignore quota / private mode
+    }
   }, [user, token, isAuthenticated])
 
   const persistAuth = (nextToken: string, nextUser: User) => {
@@ -73,32 +79,35 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     return data as AuthResponse
   }
 
-  const authorizedRequest = async <T = unknown>(
-    path: string,
-    init: RequestInit = {},
-  ): Promise<{ data: T | null; error: Error | null }> => {
-    if (!token) {
-      return { data: null, error: new Error('Not authenticated') }
-    }
-    try {
-      const { headers, ...rest } = init
-      const response = await fetch(`${API_BASE_URL}${path}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-          ...(headers || {}),
-        },
-        ...rest,
-      })
-      const payload = await response.json().catch(() => null)
-      if (!response.ok) {
-        throw new Error((payload as { error?: string } | null)?.error ?? 'Request failed')
+  const authorizedRequest = useCallback(
+    async <T = unknown>(
+      path: string,
+      init: RequestInit = {},
+    ): Promise<{ data: T | null; error: Error | null }> => {
+      if (!token) {
+        return { data: null, error: new Error('Not authenticated') }
       }
-      return { data: (payload as T) ?? null, error: null }
-    } catch (error) {
-      return { data: null, error: error instanceof Error ? error : new Error('Request failed') }
-    }
-  }
+      try {
+        const { headers, ...rest } = init
+        const response = await fetch(`${API_BASE_URL}${path}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+            ...(headers || {}),
+          },
+          ...rest,
+        })
+        const payload = await response.json().catch(() => null)
+        if (!response.ok) {
+          throw new Error((payload as { error?: string } | null)?.error ?? 'Request failed')
+        }
+        return { data: (payload as T) ?? null, error: null }
+      } catch (error) {
+        return { data: null, error: error instanceof Error ? error : new Error('Request failed') }
+      }
+    },
+    [token],
+  )
 
   const value = useMemo<UserContextValue>(
     () => ({
@@ -133,7 +142,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         const defaultUrl =
           typeof window !== 'undefined'
             ? `${window.location.origin}?upgrade=success&session_id={CHECKOUT_SESSION_ID}`
-            : 'http://localhost:5173/?upgrade=success&session_id={CHECKOUT_SESSION_ID}'
+            : 'http://localhost:3000/?upgrade=success&session_id={CHECKOUT_SESSION_ID}'
         const targetUrl = returnUrl ?? defaultUrl
 
         const { data, error } = await authorizedRequest<{ url: string }>('/api/payments/create-checkout-session', {
@@ -179,7 +188,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(createDefaultUser())
       },
     }),
-    [user, token, isAuthenticated],
+    [user, token, isAuthenticated, authorizedRequest],
   )
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>

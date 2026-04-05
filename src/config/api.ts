@@ -1,3 +1,4 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://portfolio.ismartdesignai.com'
+/** Same-origin Next.js `/api/*` routes when empty. Set for a separate API host if needed. */
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? ''
 
 

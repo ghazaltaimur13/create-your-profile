@@ -1,36 +1,30 @@
+'use client'
+
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded'
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded'
 import { Box, Button, Container, Stack, Typography } from '@mui/material'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import { useRouter } from 'next/navigation'
 import { useMemo, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 
 import { PortfolioPreview } from '../components/PortfolioPreview'
 import { DEFAULT_TEMPLATE_ID } from '../constants/templates'
 import { defaultPortfolio } from '../data/defaultPortfolio'
-import type { PortfolioFormValues, PortfolioTemplateId } from '../types/portfolio'
 import { readStoredDraft } from '../utils/portfolioStorage'
 import { useUser } from '../hooks/useUser'
 import { shouldShowWatermark } from '../config/plans'
 
-type PreviewLocationState = {
-  data?: PortfolioFormValues
-  template?: PortfolioTemplateId
-}
-
 export const PreviewPage = () => {
   const { user } = useUser()
-  const navigate = useNavigate()
-  const { state } = useLocation()
+  const router = useRouter()
   const previewRef = useRef<HTMLDivElement | null>(null)
   const [isExporting, setIsExporting] = useState(false)
 
   const storedDraft = useMemo(() => readStoredDraft(), [])
-  const locationState = state as PreviewLocationState | null
 
-  const data = locationState?.data ?? storedDraft?.values ?? defaultPortfolio
-  const template = locationState?.template ?? DEFAULT_TEMPLATE_ID
+  const data = storedDraft?.values ?? defaultPortfolio
+  const template = storedDraft?.template ?? DEFAULT_TEMPLATE_ID
 
   const handleExport = async () => {
     if (!previewRef.current) return
@@ -78,7 +72,7 @@ export const PreviewPage = () => {
               <Button
                 variant="text"
                 startIcon={<ArrowBackRoundedIcon />}
-                onClick={() => navigate('/', { state: { data, template }, replace: true })}
+                onClick={() => router.replace('/')}
               >
                 Back to editor
               </Button>

@@ -1,14 +1,21 @@
+'use client'
+
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded'
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded'
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded'
 import { Alert, Button, ButtonBase, Chip, Stack, Typography } from '@mui/material'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
+import Link from 'next/link'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
 
-import { DEFAULT_TEMPLATE_ID, PORTFOLIO_TEMPLATE_OPTIONS } from '../constants/templates'
+import {
+  DEFAULT_TEMPLATE_ID,
+  PORTFOLIO_TEMPLATE_OPTIONS,
+  type PortfolioTemplateOption,
+} from '../constants/templates'
 import { defaultPortfolio } from '../data/defaultPortfolio'
 import type { PortfolioFormValues, PortfolioTemplateId } from '../types/portfolio'
 import { PortfolioPreview } from './PortfolioPreview'
@@ -18,16 +25,11 @@ import { useUser } from '../hooks/useUser'
 import { FREE_LIMITS, isPro, shouldShow } from '../config/plans'
 import { LoginDialog } from './auth/LoginDialog'
 
-type BuilderLocationState = {
-  data?: PortfolioFormValues
-  template?: PortfolioTemplateId
-} | null
-
 export const PortfolioBuilder = () => {
   const { user, isAuthenticated, startUpgradeFlow, refreshUser, confirmUpgrade } = useUser()
-  const location = useLocation()
-  const navigate = useNavigate()
-  const locationState = location.state as BuilderLocationState
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   const storedDraft = useMemo(() => readStoredDraft(), [])
 
@@ -36,8 +38,8 @@ export const PortfolioBuilder = () => {
     [],
   )
 
-  const initialValues = locationState?.data ?? storedDraft?.values ?? fallbackData
-  const initialTemplate = locationState?.template ?? DEFAULT_TEMPLATE_ID
+  const initialValues = storedDraft?.values ?? fallbackData
+  const initialTemplate = storedDraft?.template ?? DEFAULT_TEMPLATE_ID
 
   const methods = useForm<PortfolioFormValues>({
     mode: 'onChange',
@@ -47,8 +49,6 @@ export const PortfolioBuilder = () => {
   const [activeTab, setActiveTab] = useState(0)
   const [isExporting, setIsExporting] = useState(false)
   const previewRef = useRef<HTMLDivElement | null>(null)
-  const appliedLocationDataRef = useRef<PortfolioFormValues | undefined>(undefined)
-  const appliedTemplateRef = useRef<PortfolioTemplateId | undefined>(undefined)
 
   // Ensure initial template respects plan limits
   const firstAllowedFreeTemplate =
@@ -68,19 +68,13 @@ export const PortfolioBuilder = () => {
   const [isConfirmingUpgrade, setIsConfirmingUpgrade] = useState(false)
 
   const clearUpgradeParams = useCallback(() => {
-    const params = new URLSearchParams(location.search)
+    const params = new URLSearchParams(searchParams.toString())
     if (!params.has('upgrade') && !params.has('session_id')) return
     params.delete('upgrade')
     params.delete('session_id')
     const search = params.toString()
-    navigate(
-      {
-        pathname: location.pathname,
-        search: search ? `?${search}` : '',
-      },
-      { replace: true },
-    )
-  }, [location.pathname, location.search, navigate])
+    router.replace(search ? `${pathname}?${search}` : pathname)
+  }, [pathname, router, searchParams])
 
   const selectedTemplateOption = useMemo(
     () =>
@@ -92,26 +86,12 @@ export const PortfolioBuilder = () => {
   const snapshot = methods.watch()
 
   useEffect(() => {
-    if (!locationState?.data) return
-    if (appliedLocationDataRef.current === locationState.data) return
-    methods.reset(locationState.data)
-    appliedLocationDataRef.current = locationState.data
-  }, [locationState?.data, methods])
-
-  useEffect(() => {
-    if (!locationState?.template) return
-    if (appliedTemplateRef.current === locationState.template) return
-    setSelectedTemplate(locationState.template)
-    appliedTemplateRef.current = locationState.template
-  }, [locationState?.template])
-
-  useEffect(() => {
     if (!snapshot) return
     writeStoredDraft({ values: snapshot, template: selectedTemplate })
   }, [snapshot, selectedTemplate])
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search)
+    const params = new URLSearchParams(searchParams.toString())
     const upgradeParam = params.get('upgrade')
     const checkoutSessionId = params.get('session_id')
     if (upgradeParam === 'success') {
@@ -139,7 +119,7 @@ export const PortfolioBuilder = () => {
     } else {
       setUpgradeStatus(null)
     }
-  }, [location.search, confirmUpgrade, refreshUser, clearUpgradeParams])
+  }, [searchParams, confirmUpgrade, refreshUser, clearUpgradeParams])
 
   const hasContent = useMemo(() => {
     const { personal, skills, projects, experience, education } = snapshot
@@ -226,8 +206,7 @@ export const PortfolioBuilder = () => {
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="stretch">
             <Button
               component={Link}
-              to="/preview"
-              state={{ data: snapshot, template: selectedTemplate }}
+              href="/preview"
               variant="outlined"
               startIcon={<VisibilityRoundedIcon />}
             >
@@ -275,7 +254,7 @@ export const PortfolioBuilder = () => {
             </div>
           )}
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
-            {visibleTemplateOptions.map((option: any) => {
+            {visibleTemplateOptions.map((option: PortfolioTemplateOption & { __locked?: boolean }) => {
               const isActive = option.id === selectedTemplate
               const isLocked = Boolean(option.__locked) && !isPro(user)
               return (

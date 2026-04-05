@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+.next
 dist-ssr
 *.local
 
@@ -16,7 +17,9 @@ dist-ssr
 .env
 .env.local
 .env.*.local
-server/.env
+
+# Leftover Express `server/` tree (safe to delete locally if migration is done)
+server/
 
 # Editor directories and files
 .vscode/*
