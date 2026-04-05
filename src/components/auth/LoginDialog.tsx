@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Alert,
   Button,
@@ -12,8 +14,9 @@ import {
   Typography,
 } from '@mui/material'
 import { useState } from 'react'
-import { useUser } from '../../hooks/useUser'
-import type { User } from '../../types/user'
+
+import { useUser } from '@/hooks/useUser'
+import type { User } from '@/types/user'
 
 type Props = {
   open: boolean
@@ -54,52 +57,94 @@ export const LoginDialog = ({ open, onClose, onAuthenticated }: Props) => {
   }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{mode === 'login' ? 'Log in to unlock Pro' : 'Create your account'}</DialogTitle>
-      <DialogContent>
-        <Stack spacing={2} sx={{ mt: 1 }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="body2" color="text.secondary">
-              {mode === 'login' ? 'Access your account to continue.' : 'Sign up to get started.'}
-            </Typography>
-            <ToggleButtonGroup
-              value={mode}
-              exclusive
-              size="small"
-              onChange={(_, val) => val && setMode(val)}
-            >
-              <ToggleButton value="login">Login</ToggleButton>
-              <ToggleButton value="signup">Sign Up</ToggleButton>
-            </ToggleButtonGroup>
-          </Stack>
-          {error && <Alert severity="error">{error}</Alert>}
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      slotProps={{
+        paper: {
+          sx: { borderRadius: 2 },
+        },
+      }}
+    >
+      <DialogTitle component="div">
+        <Typography variant="h6" component="span" fontWeight={700}>
+          {mode === 'login' ? 'Log in to unlock Pro' : 'Create your account'}
+        </Typography>
+      </DialogTitle>
+      <DialogContent sx={{ px: 3, pt: 0 }}>
+        <Stack spacing={2.5} sx={{ pt: 0.5 }}>
+          <Typography variant="body2" color="text.secondary">
+            {mode === 'login' ? 'Access your account to continue.' : 'Sign up to get started.'}
+          </Typography>
+
+          <ToggleButtonGroup
+            value={mode}
+            exclusive
+            fullWidth
+            size="small"
+            onChange={(_, val) => val && setMode(val)}
+            aria-label="Login or sign up"
+            sx={{
+              display: 'flex',
+              gap: 1,
+              '& .MuiToggleButton-root': {
+                flex: 1,
+                py: 1,
+                textTransform: 'none',
+                fontWeight: 600,
+              },
+            }}
+          >
+            <ToggleButton value="login">Log in</ToggleButton>
+            <ToggleButton value="signup">Sign up</ToggleButton>
+          </ToggleButtonGroup>
+
+          {error ? <Alert severity="error">{error}</Alert> : null}
+
           <TextField
             label="Email"
             type="email"
+            name="email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoFocus
             fullWidth
+            variant="outlined"
+            size="medium"
           />
           <TextField
             label="Password"
             type="password"
+            name="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             fullWidth
+            variant="outlined"
+            size="medium"
+            slotProps={mode === 'signup' ? { htmlInput: { autoComplete: 'new-password' } } : { htmlInput: { autoComplete: 'current-password' } }}
           />
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
-        <Button onClick={onClose} color="inherit">
+      <DialogActions
+        sx={{
+          px: 3,
+          pb: 2.5,
+          pt: 1,
+          gap: 1.5,
+          flexWrap: 'wrap',
+          justifyContent: 'flex-end',
+        }}
+      >
+        <Button onClick={onClose} color="inherit" sx={{ textTransform: 'none' }}>
           Cancel
         </Button>
-        <Button onClick={handleSubmit} variant="contained" disabled={!canSubmit || submitting}>
+        <Button onClick={handleSubmit} variant="contained" disabled={!canSubmit || submitting} sx={{ textTransform: 'none', minWidth: 120 }}>
           {submitting ? (mode === 'login' ? 'Logging in…' : 'Signing up…') : mode === 'login' ? 'Log in' : 'Sign up'}
         </Button>
       </DialogActions>
     </Dialog>
   )
 }
-
-

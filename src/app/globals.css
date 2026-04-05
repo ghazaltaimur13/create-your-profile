@@ -14,3 +14,9 @@ body {
   background-color: #f8fafc;
   color: #0f172a;
 }
+
+/* Tailwind preflight sets border-width: 0 on all elements; MUI OutlinedInput uses a <fieldset> for the notch. */
+.MuiOutlinedInput-root fieldset.MuiOutlinedInput-notchedOutline,
+.MuiOutlinedInput-notchedOutline {
+  border-width: 1px;
+}
